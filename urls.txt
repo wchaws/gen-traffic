@@ -51,3 +51,7 @@ https://$HOST/example.jpg?x-oss-process=image/watermark,text_SGVsbG8gV29ybGQ,fil
 https://$HOST/example.jpg?x-oss-process=image/watermark,text_SGVsbG8gV29ybGQ,fill_0
 https://$HOST/example.jpg?x-oss-process=image/quality,q_70/watermark,text_4paI4paI4paI4paI,g_se,x_0,y_0,size_24,shadow_0,color_3E3E3E/watermark,text_5Yqo5Zu-,g_se,x_6,y_4,size_24,shadow_0,color_FFFFFF/resize,w_490
 https://$HOST/example.jpg?x-oss-process=image/watermark,text_SG9Zb0xBQkBXV1dXV1dXV1dXV1dXV1dXV1dXV1dXV1cyNA==,size_26,color_FFFFFF,shadow_50,t_70,g_se,x_37,y_77
+https://$HOST/example.jpg?x-oss-process=image/error
+https://$HOST/example.jpg?x-oss-process=image/invalid
+https://$HOST/404
+https://$HOST/invalid
