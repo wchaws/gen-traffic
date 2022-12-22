@@ -28,3 +28,7 @@ A simple HTTP traffic generator triggered by Github Action periodically.
 2. Q: How do I manually trigger requests?
    
    A: Please see this [guide](https://docs.github.com/en/actions/managing-workflow-runs/manually-running-a-workflow).
+
+3. Q: How to stop triggering?
+   
+   A: To stop triggering, delete `schedule` in `.github/workflows/traffic.yml` and git commit.
