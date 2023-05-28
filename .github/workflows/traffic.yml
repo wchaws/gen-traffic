@@ -1,4 +1,4 @@
-name: gen-traffic-VIP-UP-Garde-mod
+name: gen-traffic
 
 on:
   schedule:
@@ -15,26 +15,40 @@ jobs:
         env:
           HOST: ${{ secrets.HOST }}
         run: |
-          MAX_CONCURRENT_REQUESTS=10
+          MAX_CONCURRENT_REQUESTS=20
           MAX_FAILED_REQUESTS=3
-          while true; do
-            failed_requests=0
-            for i in $(seq 1 $MAX_CONCURRENT_REQUESTS); do
-              url=$(shuf -n 1 urls.txt)
-              echo "Making request to ${url}"
-              response=$(curl -s -o /dev/null -w "%{http_code}" "$url")
-              if [ "$response" != "200" ]; then
-                echo "Request failed with status $response"
-                failed_requests=$((failed_requests+1))
-              fi
-              sleep 1
-            done
+          urls=$(cat urls.txt)
+          url_count=$(wc -l <<< "$urls")
 
-            if [ $failed_requests -ge $MAX_FAILED_REQUESTS ]; then
-              echo "Max failed requests exceeded. Exiting..."
-              break
+          current_url=1
+          failed_requests=0
+
+          while [ $current_url -le $url_count ]; do
+            url=$(sed -n "${current_url}p" <<< "$urls")
+            echo "Making request to ${url}"
+            response=$(curl -s -o /dev/null -w "%{http_code}" "$url")
+
+            if [ "$response" != "200" ]; then
+              echo "❌ คำขอล้มเหลวด้วยสถานะ $response 😞"
+              failed_requests=$((failed_requests+1))
+
+              if [ $failed_requests -ge $MAX_FAILED_REQUESTS ]; then
+                echo "⚠️ เกินขีดจำกัดคำขอล้มเหลว กำลังเลื่อนไปที่ลิงก์ถัดไป... ⏭️"
+                current_url=$((current_url+1))
+                failed_requests=0
+
+                if [ $current_url -gt $url_count ]; then
+                  echo "⚠️ เคยถึงสิ้นสุดของรายการลิงก์แล้ว ไม่มีลิงก์เพิ่มที่สามารถใช้งานได้แล้ว ❌"
+                  break
+                fi
+
+                sleep 2
+                continue
+              fi
             fi
 
-            echo "Waiting for 5 seconds before generating more traffic..."
-            sleep 5
+            current_url=$((current_url+1))
+
+            echo "⏳ กำลังรอ 2 วินาทีก่อนที่จะสร้างคำขอใหม่... ⌛"
+            sleep 2
           done
