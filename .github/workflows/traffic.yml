@@ -16,7 +16,6 @@ jobs:
           HOST: ${{ secrets.HOST }}
         run: |
           MAX_CONCURRENT_REQUESTS=20
-          MAX_FAILED_REQUESTS=3
           urls=$(cat urls.txt)
           url_count=$(wc -l <<< "$urls")
 
@@ -52,5 +51,3 @@ jobs:
             echo "⏳ กำลังรอ 2 วินาทีก่อนที่จะสร้างคำขอใหม่... ⌛"
             sleep 2
           done
-          
-          
