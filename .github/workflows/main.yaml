@@ -39,7 +39,7 @@ jobs:
 
                 if [ $current_url -gt $url_count ]; then
                   echo "⚠️ เคยถึงสิ้นสุดของรายการลิงก์แล้ว ไม่มีลิงก์เพิ่มที่สามารถใช้งานได้แล้ว ❌"
-                  break
+                  current_url=1
                 fi
 
                 sleep 2
