@@ -1,8 +1,8 @@
-name: gen-traffic
+name: gen-traffic-VIP-UP-Garde-mod
 
 on:
   schedule:
-    - cron: "*/10 * * * *" # ทำงานทุก 10 นาที
+    - cron: "*/5 * * * *" # ทำงานทุก 5 นาที
 
 jobs:
   gen-traffic:
@@ -15,8 +15,26 @@ jobs:
         env:
           HOST: ${{ secrets.HOST }}
         run: |
+          MAX_CONCURRENT_REQUESTS=10
+          MAX_FAILED_REQUESTS=3
           while true; do
-            N=$(shuf -i 1-100 -n 1)
-            echo "Making ${N} random requests"
-            shuf -n ${N} urls.txt | envsubst | xargs -t -I {} bash -c "curl {} -o /dev/null; sleep 1;" || true
-          
+            failed_requests=0
+            for i in $(seq 1 $MAX_CONCURRENT_REQUESTS); do
+              url=$(shuf -n 1 urls.txt)
+              echo "Making request to ${url}"
+              response=$(curl -s -o /dev/null -w "%{http_code}" "$url")
+              if [ "$response" != "200" ]; then
+                echo "Request failed with status $response"
+                failed_requests=$((failed_requests+1))
+              fi
+              sleep 1
+            done
+
+            if [ $failed_requests -ge $MAX_FAILED_REQUESTS ]; then
+              echo "Max failed requests exceeded. Exiting..."
+              break
+            fi
+
+            echo "Waiting for 5 seconds before generating more traffic..."
+            sleep 5
+          done
