@@ -2,7 +2,7 @@ name: gen-traffic
 
 on:
   schedule:
-    - cron: "*/1 * * * *" # ทำงานทุก 5 นาที
+    - cron: "*/1 * * * *" 
 
 jobs:
   gen-traffic:
