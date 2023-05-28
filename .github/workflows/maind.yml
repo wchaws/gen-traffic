@@ -1,11 +1,11 @@
-name: gen-traffic
+name: smain-traffic
 
 on:
   schedule:
     - cron: "*/5 * * * *" # ทำงานทุก 5 นาที
 
 jobs:
-  gen-traffic:
+  smain-traffic:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -46,7 +46,7 @@ jobs:
                 continue
               fi
             fi
-
+  
             current_url=$((current_url+1))
 
             echo "⏳ กำลังรอ 2 วินาทีก่อนที่จะสร้างคำขอใหม่... ⌛"
