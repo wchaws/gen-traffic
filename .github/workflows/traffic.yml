@@ -2,7 +2,7 @@ name: gen-traffic
 
 on:
   schedule:
-    - cron: "*/5 * * * *" # ทำงานทุก 5 นาที
+    - cron: "*/1 * * * *" # ทำงานทุก 5 นาที
 
 jobs:
   gen-traffic:
@@ -16,6 +16,7 @@ jobs:
           HOST: ${{ secrets.HOST }}
         run: |
           MAX_CONCURRENT_REQUESTS=20
+          MAX_FAILED_REQUESTS=3
           urls=$(cat urls.txt)
           url_count=$(wc -l <<< "$urls")
 
@@ -38,7 +39,7 @@ jobs:
 
                 if [ $current_url -gt $url_count ]; then
                   echo "⚠️ เคยถึงสิ้นสุดของรายการลิงก์แล้ว ไม่มีลิงก์เพิ่มที่สามารถใช้งานได้แล้ว ❌"
-                  break
+                  current_url=1
                 fi
 
                 sleep 2
