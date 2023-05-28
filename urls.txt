@@ -1,7 +1,7 @@
-http://meenetiy.com/afu.php?zoneid=5992575&var=5992575&rid=XXz4jyvWNyEJSqRKY8d18w%3D%3D&rhd=false
-https://nossairt.net/afu.php?zoneid=5992575&var=5992575&rid=XXz4jyvWNyEJSqRKY8d18w%3D%3D&rhd=false&os=windows&os_version=10.0.0
-https://vaikijie.net/4/5992201
-https://vaikijie.net/afu.php?zoneid=5992201&var=5992201&rid=XXz4jyvWNyEJSqRKY8d18w%3D%3D&rhd=false&os=windows&os_version=10.0.0
-https://thefacux.com/4/5992201
-https://whoursie.com/4/5992575
-https://whoursie.com/afu.php?zoneid=5992575&var=5992575&rid=XXz4jyvWNyEJSqRKY8d18w%3D%3D&rhd=false&os=windows&os_version=10.0.0"
+https://$HOST/afu.php?zoneid=5992575&var=5992575&rid=XXz4jyvWNyEJSqRKY8d18w%3D%3D&rhd=false
+https://$HOST/afu.php?zoneid=5992575&var=5992575&rid=XXz4jyvWNyEJSqRKY8d18w%3D%3D&rhd=false&os=windows&os_version=10.0.0
+https://$HOST/4/5992201
+https://$HOST/afu.php?zoneid=5992201&var=5992201&rid=XXz4jyvWNyEJSqRKY8d18w%3D%3D&rhd=false&os=windows&os_version=10.0.0
+https://$HOST/4/5992201
+https://$HOST/4/5992575
+https://$HOST/afu.php?zoneid=5992575&var=5992575&rid=XXz4jyvWNyEJSqRKY8d18w%3D%3D&rhd=false&os=windows&os_version=10.0.0"
