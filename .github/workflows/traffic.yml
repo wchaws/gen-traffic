@@ -19,5 +19,4 @@ jobs:
             N=$(shuf -i 1-100 -n 1)
             echo "Making ${N} random requests"
             shuf -n ${N} urls.txt | envsubst | xargs -t -I {} bash -c "curl {} -o /dev/null; sleep 1;" || true
-            sleep 10
-          done
+          
