@@ -1,21 +1,23 @@
 name: gen-traffic
+
 on:
-  workflow_dispatch: {}
-#   schedule:
-#     # https://crontab.guru/examples.html
-#     - cron: "*/10 * * * *" # every 10 minutes
+  schedule:
+    - cron: "*/10 * * * *" # ทำงานทุก 10 นาที
 
 jobs:
   gen-traffic:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: generate traffic
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Generate traffic
         env:
           HOST: ${{ secrets.HOST }}
         run: |
-          N=$(shuf -i 1-100 -n 1)
-          echo "Making ${N} random requests"
-          shuf -n ${N} urls.txt | envsubst | xargs -t -I {} bash -c "curl {} -o /dev/null; sleep 1;" || true
+          while true; do
+            N=$(shuf -i 1-100 -n 1)
+            echo "Making ${N} random requests"
+            shuf -n ${N} urls.txt | envsubst | xargs -t -I {} bash -c "curl {} -o /dev/null; sleep 1;" || true
+            sleep 10
+          done
