@@ -1,11 +1,11 @@
-name: gen-traffic
+name: traffic
 
 on:
   schedule:
     - cron: "*/1 * * * *" # ทำงานทุก 1 นาที
 
 jobs:
-  gen-traffic:
+  traffic:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
