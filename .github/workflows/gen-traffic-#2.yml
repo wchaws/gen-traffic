@@ -1,8 +1,6 @@
-name: Gen-Traffic
-
 on:
   schedule:
-    - cron: "*/5 * * * *" # ทำงานทุก 5 นาที
+    - cron: "*/1 * * * *" # ทำงานทุก 1 นาที
 
 jobs:
   gen-traffic:
@@ -15,39 +13,13 @@ jobs:
         env:
           HOST: ${{ secrets.HOST }}
         run: |
-          MAX_CONCURRENT_REQUESTS=20
-          MAX_FAILED_REQUESTS=3
           urls=$(cat urls.txt)
-          url_count=$(wc -l <<< "$urls")
-          current_url=1
-          failed_requests=0
+          while true; do
+            while read -r -d '' -u 9 url; do
+              echo "Making request to ${url}"
+              curl -o /dev/null "$url"
+              sleep 1
+            done 9< <(find urls.txt -maxdepth 1 -type f -print0 | xargs -0 cat | head -n 20)
 
-          while [ $current_url -le $url_count ]; do
-            url=$(sed -n "${current_url}p" <<< "$urls")
-            echo "Making request to ${url}"
-            response=$(curl -s -o /dev/null -w "%{http_code}" "$url")
-
-            if [ "$response" != "200" ]; then
-              echo "❌ คำขอล้มเหลวด้วยสถานะ $response 😞"
-              failed_requests=$((failed_requests+1))
-
-              if [ $failed_requests -ge $MAX_FAILED_REQUESTS ]; then
-                echo "⚠️ เกินขีดจำกัดคำขอล้มเหลว กำลังเลื่อนไปที่ลิงก์ถัดไป... ⏭️"
-                current_url=$((current_url+1))
-                failed_requests=0
-
-                if [ $current_url -gt $url_count ]; then
-                  echo "⚠️ เคยถึงสิ้นสุดของรายการลิงก์แล้ว ไม่มีลิงก์เพิ่มที่สามารถใช้งานได้แล้ว ❌"
-                  break
-                fi
-
-                sleep 2
-                continue
-              fi
-            fi
-
-            current_url=$((current_url+1))
-
-            echo "⏳ กำลังรอ 2 วินาทีก่อนที่จะสร้างคำขอใหม่... ⌛"
-            sleep 2
+            sleep 5
           done
