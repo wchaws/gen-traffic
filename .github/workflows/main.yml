@@ -17,17 +17,16 @@ jobs:
         run: |
           urls=$(cat urls.txt)
           while true; do
-            while read -r url; do
+            while IFS= read -r url; do
               echo "Making request to ${url}"
               response=$(curl -s -o /dev/null -w "%{http_code}" "$url")
-
               if [ "$response" != "200" ]; then
                 echo "❌ คำขอล้มเหลวด้วยสถานะ $response 😞"
                 sleep 2
                 continue
               fi
-
               echo "⏳ กำลังรอ 2 วินาทีก่อนที่จะสร้างคำขอใหม่... ⌛"
               sleep 2
             done <<< "$urls"
+            sleep 5
           done
