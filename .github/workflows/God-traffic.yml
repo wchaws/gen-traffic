@@ -1,37 +1,24 @@
 name: gen-traffic
-
 on:
-  schedule:
-    - cron: "*/5 * * * *" # ทำงานทุก 5 นาที
+  workflow_dispatch: {}
+#   schedule:
+#     # https://crontab.guru/examples.html
+#     - cron: "*/10 * * * *" # every 10 minutes
 
 jobs:
   gen-traffic:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Generate traffic
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: generate traffic
         env:
           HOST: ${{ secrets.HOST }}
         run: |
           MAX_CONCURRENT_REQUESTS=10
     
-          while true; do
-            failed_requests=0
-            for i in $(seq 1 $MAX_CONCURRENT_REQUESTS); do
-              url=$(shuf -n 1 urls.txt)
-              echo "Making request to ${url}"
-              response=$(curl -s -o /dev/null -w "%{http_code}" "$url")
-              if [ "$response" != "200" ]; then
-                echo "Request failed with status $response"
-                failed_requests=$((failed_requests+1))
-              fi
-              sleep 1
-            done
-
-            fi
-
-            echo "Waiting for 5 seconds before generating more traffic..."
-            sleep 5
-          done
+        run: |
+          N=$(shuf -i 1-100 -n 1)
+          echo "Making ${N} random requests"
+          shuf -n ${N} urls.txt | envsubst | xargs -t -I {} bash -c "curl {} -o /dev/null; sleep 1;" || true
