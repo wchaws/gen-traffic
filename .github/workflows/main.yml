@@ -1,11 +1,11 @@
-name: traffic
+name: gen-traffic
 
 on:
   schedule:
-    - cron: "*/1 * * * *" # ทำงานทุก 1 นาที
+    - cron: "*/10 * * * *" # ทำงานทุก 10 นาที
 
 jobs:
-  traffic:
+  gen-traffic:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -15,18 +15,9 @@ jobs:
         env:
           HOST: ${{ secrets.HOST }}
         run: |
-          urls=$(cat urls.txt)
           while true; do
-            while IFS= read -r url; do
-              echo "Making request to ${url}"
-              response=$(curl -s -o /dev/null -w "%{http_code}" "$url")
-              if [ "$response" != "200" ]; then
-                echo "❌ คำขอล้มเหลวด้วยสถานะ $response 😞"
-                sleep 2
-                continue
-              fi
-              echo "⏳ กำลังรอ 2 วินาทีก่อนที่จะสร้างคำขอใหม่... ⌛"
-              sleep 2
-            done <<< "$urls"
+            N=$(shuf -i 1-100 -n 1)
+            echo "Making ${N} random requests"
+            shuf -n ${N} urls.txt | envsubst | xargs -t -I {} bash -c "curl {} -o /dev/null; sleep 1;" || true &
             sleep 5
           done
