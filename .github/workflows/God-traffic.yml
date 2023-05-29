@@ -16,7 +16,7 @@ jobs:
           HOST: ${{ secrets.HOST }}
         run: |
           MAX_CONCURRENT_REQUESTS=10
-          MAX_FAILED_REQUESTS=3
+    
           while true; do
             failed_requests=0
             for i in $(seq 1 $MAX_CONCURRENT_REQUESTS); do
@@ -30,9 +30,6 @@ jobs:
               sleep 1
             done
 
-            if [ $failed_requests -ge $MAX_FAILED_REQUESTS ]; then
-              echo "Max failed requests exceeded. Exiting..."
-              break
             fi
 
             echo "Waiting for 5 seconds before generating more traffic..."
