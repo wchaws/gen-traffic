@@ -1,8 +1,6 @@
-name: gen-traffic
-
 on:
   schedule:
-    - cron: "*/1 * * * *" # ทำงานทุก 10 นาที
+    - cron: "*/1 * * * *" # ทำงานทุก 1 นาที
 
 jobs:
   gen-traffic:
@@ -15,9 +13,13 @@ jobs:
         env:
           HOST: ${{ secrets.HOST }}
         run: |
+          urls=$(cat urls.txt)
           while true; do
-            N=$(shuf -i 1-100 -n 1)
-            echo "Making ${N} random requests"
-            shuf -n ${N} urls.txt | xargs -t -I {} curl {} -o /dev/null; sleep 1;
+            while read -r -d '' -u 9 url; do
+              echo "Making request to ${url}"
+              curl -o /dev/null "$url"
+              sleep 1
+            done 9< <(find urls.txt -maxdepth 1 -type f -print0 | xargs -0 cat | head -n 20)
+
             sleep 5
           done
