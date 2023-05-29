@@ -1,8 +1,8 @@
-name: gen-traffisc
+name: gen-traffic
 
 on:
   schedule:
-    - cron: "*/1 * * * *" # ทำงานทุก 10 นาที
+    - cron: "*/10 * * * *" # ทำงานทุก 10 นาที
 
 jobs:
   gen-traffic:
