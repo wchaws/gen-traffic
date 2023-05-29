@@ -1,4 +1,4 @@
-name: gen-traffic
+name: gen-traffisc
 
 on:
   schedule:
